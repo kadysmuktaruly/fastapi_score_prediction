@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Study Score Predictor</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#0f172a;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:#1e293b;
+    padding:40px;
+    border-radius:10px;
+    text-align:center;
+    width:300px;
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:5px;
+    border:none;
+}
+
+button{
+    margin-top:15px;
+    padding:10px;
+    width:100%;
+    background:#3b82f6;
+    border:none;
+    color:white;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#2563eb;
+}
+
+#result{
+    margin-top:20px;
+    font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>📚 Grade Predictor</h2>
+
+<p>Enter hours studied</p>
+
+<input id="hours" type="number" placeholder="e.g. 4">
+
+<button onclick="predict()">Predict Score</button>
+
+<div id="result"></div>
+
+</div>
+
+<script>
+async function predict(){
+
+    const hours = document.getElementById("hours").value;
+    const resultDiv = document.getElementById("result");
+
+    if(hours === ""){
+        resultDiv.innerText = "Please enter hours studied.";
+        return;
+    }
+
+    resultDiv.innerText = "Predicting...";
+
+    const response = await fetch("/predict",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+            hours_studied: parseFloat(hours)
+        })
+    });
+
+    const data = await response.json();
+
+    resultDiv.innerText =
+        "Predicted Score: " + data.predicted_score.toFixed(2);
+}
+</script>
+
+</body>
+</html>

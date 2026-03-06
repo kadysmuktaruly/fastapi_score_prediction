@@ -22,4 +22,7 @@ class StudyInput(BaseModel):
 @app.post("/predict")
 def predict(data: StudyInput):
     prediction = model.predict(np.array([[data.hours_studied]]))
-    return {"predicted_score": float(prediction[0])}
+    if float(prediction[0]) <100.0:
+        val = float(prediction[0])
+    else:        val = 100.0
+    return {"predicted_score": val}
